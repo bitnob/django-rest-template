@@ -1,0 +1,71 @@
+version: 2
+jobs:
+  build:
+    machine: true
+    working_directory: ~/bitnob_api
+    steps:
+      - checkout
+      - run:
+          name: Run tests
+          command: |
+            docker-compose -f local.yml up -d
+            docker-compose -f local.yml run django python manage.py help
+            docker-compose -f local.yml run django pytest
+  deploy:
+    machine: true
+    working_directory: ~/bitnob_api
+    steps:
+      - checkout
+      - add_ssh_keys:
+          fingerprints:
+            f1:40:4a:0f:1f:be:da:74:89:f5:1e:bd:da:9b:78:7b
+      - run:
+          name: Deploy Master to Digital Ocean
+          command: |
+            cp ./id_rsa_f1404a0f1fbeda7489f51ebdda9b787b.pub ~/.ssh
+            ls -al ~/.ssh
+            base=https://github.com/docker/machine/releases/download/v0.14.0 &&
+            curl -L $base/docker-machine-$(uname -s)-$(uname -m) >/tmp/docker-machine &&
+            sudo install /tmp/docker-machine /usr/local/bin/docker-machine
+            mkdir -p .envs/.production
+            echo POSTGRES_HOST=$POSTGRES_HOST >> .envs/.production/.postgres
+            echo POSTGRES_PORT=$POSTGRES_PORT >> .envs/.production/.postgres
+            echo POSTGRES_DB=$POSTGRES_DB >> .envs/.production/.postgres
+            echo POSTGRES_USER=$POSTGRES_USER >> .envs/.production/.postgres
+            echo POSTGRES_PASSWORD=$POSTGRES_PASSWORD >> .envs/.production/.postgres
+            echo DJANGO_SETTINGS_MODULE=$DJANGO_SETTINGS_MODULE >> .envs/.production/.django
+            echo WALLET_BASE_URL >> .envs/.production/.django
+            echo DJANGO_EMAIL_SUBJECT_PREFIX >> .envs/.production/.django
+            echo DJANGO_SECRET_KEY=$DJANGO_SECRET_KEY >> .envs/.production/.django
+            echo DJANGO_ADMIN_URL=$DJANGO_ADMIN_URL >> .envs/.production/.django
+            echo DJANGO_ALLOWED_HOSTS=$DJANGO_ALLOWED_HOSTS >> .envs/.production/.django
+            echo DJANGO_SECURE_SSL_REDIRECT=$DJANGO_SECURE_SSL_REDIRECT >> .envs/.production/.django
+            echo MAILGUN_API_KEY=$MAILGUN_API_KEY >> .envs/.production/.django
+            echo DJANGO_SERVER_EMAIL=$DJANGO_SERVER_EMAIL >> .envs/.production/.django
+            echo MAILGUN_DOMAIN=$MAILGUN_DOMAIN >> .envs/.production/.django
+            echo DJANGO_AWS_ACCESS_KEY_ID=$DJANGO_AWS_ACCESS_KEY_ID >> .envs/.production/.django
+            echo DJANGO_AWS_SECRET_ACCESS_KEY=$DJANGO_AWS_SECRET_ACCESS_KEY >> .envs/.production/.django
+            echo DJANGO_AWS_STORAGE_BUCKET_NAME=$DJANGO_AWS_STORAGE_BUCKET_NAME >> .envs/.production/.django
+            echo DJANGO_ACCOUNT_ALLOW_REGISTRATION=$DJANGO_ACCOUNT_ALLOW_REGISTRATION >> .envs/.production/.django
+            echo WEB_CONCURRENCY=$WEB_CONCURRENCY >> .envs/.production/.django
+            echo SENTRY_DSN=$SENTRY_DSN >> .envs/.production/.django
+            echo REDIS_URL=$REDIS_URL >> .envs/.production/.django
+            echo VOGUEPAY_KEY >> .envs/.production/.django
+            echo RECEIVE_API_KEY >> .envs/.production/.django
+            echo RECEIVE_XPUB >> .envs/.production/.django
+            echo PAYSTACK_SECRET >> .envs/.production/.django
+            echo DOMAIN_NAME=$DOMAIN_NAME >> .envs/.production/.caddy
+            docker-machine create --driver generic --generic-ip-address 165.22.37.87 --generic-ssh-key ~/.ssh/id_rsa_f1404a0f1fbeda7489f51ebdda9b787b bitnob-api
+            export COMPOSE_TLS_VERSION=TLSv1_2
+            eval "$(docker-machine env bitnob-api)"
+            docker-compose -f production.yml build
+            docker-compose -f production.yml up -d
+
+workflows:
+  version: 2
+  build-and-deploy:
+    jobs:
+      - build
+      - deploy:
+          requires:
+            - build

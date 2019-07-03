@@ -1,0 +1,13 @@
+# General
+# ------------------------------------------------------------------------------
+USE_DOCKER=yes
+
+# Redis
+# ------------------------------------------------------------------------------
+REDIS_URL=redis://redis:6379/0
+WALLET_ID=82f06008-1438-4fbe-82f0-96537b6b866c
+RECEIVE_API_KEY=925a21a1-612d-4557-b558-f26a3f174c74
+RECEIVE_XPUB=xpub6D3YN3BEpWKnm4MWMmYxiJhFoBFhysBsCN6QwNseKSoo6sESTqQiTHb7u6mgPonkVc8r2S2BNxeqgzrqSqRRBay5oVWEMXjyMzMN7g4UYtb
+WALLET_BASE_URL=https://13397.ngrok.io/api/v1/buy_orders/remote_send/
+VOGUEPAY_KEY=demo
+PAYSTACK_SECRET=Bearer sk_test_b48d31443b36bfdeb614ecb4911debe967329de2
