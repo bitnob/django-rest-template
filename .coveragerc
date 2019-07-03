@@ -1,5 +1,5 @@
 [run]
-include = bitnob_api/*
+include = app_api/*
 omit = *migrations*, *tests*
 plugins =
     django_coverage_plugin

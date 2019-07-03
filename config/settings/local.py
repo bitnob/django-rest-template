@@ -8,7 +8,7 @@ DEBUG = True
 # https://docs.djangoproject.com/en/dev/ref/settings/#secret-key
 SECRET_KEY = env('DJANGO_SECRET_KEY', default='eaLS5pYsD9dRgByx0hQOCJPaSYBtO9bJMIuY2RQi7IPpotBOgDOCcoKlzTL3fj6y')
 # https://docs.djangoproject.com/en/dev/ref/settings/#allowed-hosts
-ALLOWED_HOSTS = ['*', 'ba52fd3b.ngrok.io', 'https://ba52fd3b.ngrok.io/']
+ALLOWED_HOSTS = ['*']
 
 # CACHES
 # ------------------------------------------------------------------------------
@@ -61,9 +61,8 @@ INSTALLED_APPS += ['django_extensions']  # noqa F405
 
 # Your stuff...
 # ------------------------------------------------------------------------------
-URL_FRONT = 'http://localhost:8064/app/#/'
-ACCOUNT_PASSWORD_RESET_CONFIRM = URL_FRONT + 'access/password-reset/confirm/'
-VOUCHER_API = 'https://c0df2ed7.ngrok.io/api/v1/validator/'
+URL_FRONT = 'http://localhost:8080'  # add the url to your apps frontend client here
+ACCOUNT_PASSWORD_RESET_CONFIRM = URL_FRONT + 'access/password-reset/confirm/' #update this to the password reset link on your client
 APPEND_SLASH = False
 
-SITE_ID = 2
+SITE_ID = 2  # localsite

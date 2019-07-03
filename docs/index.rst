@@ -1,9 +1,9 @@
-.. bitnob-api documentation master file, created by
+.. app-api documentation master file, created by
    sphinx-quickstart.
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to bitnob-api's documentation!
+Welcome to app-api's documentation!
 ====================================================================
 
 Contents:

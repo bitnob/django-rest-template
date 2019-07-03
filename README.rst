@@ -1,14 +1,14 @@
-bitnob-api
+app-api
 ==========
 
-Bitnob API
+app API
 
 .. image:: https://img.shields.io/badge/built%20with-Cookiecutter%20Django-ff69b4.svg
      :target: https://github.com/pydanny/cookiecutter-django/
      :alt: Built with Cookiecutter Django
 
-.. image:: https://circleci.com/gh/bitnob/bitnob-api.svg?style=svg&circle-token=616d7e4d923bab92a460c874bcc26aa258dbd303
-    :target: https://circleci.com/gh/bitnob/bitnob-api
+.. image:: https://circleci.com/gh/app/app-api.svg?style=svg&circle-token=616d7e4d923bab92a460c874bcc26aa258dbd303
+    :target: https://circleci.com/gh/app/app-api
 
 Settings
 --------

@@ -6,8 +6,8 @@ import environ
 import datetime
 
 
-ROOT_DIR = environ.Path(__file__) - 3  # (bitnob_api/config/settings/base.py - 3 = bitnob_api/)
-APPS_DIR = ROOT_DIR.path('bitnob_api')
+ROOT_DIR = environ.Path(__file__) - 3  # (app_api/config/settings/base.py - 3 = app_api/)
+APPS_DIR = ROOT_DIR.path('app_api')
 
 env = environ.Env()
 
@@ -76,17 +76,10 @@ THIRD_PARTY_APPS = [
     'rest_auth',
     'rest_framework_jwt',
     'corsheaders',
-    'stats',
-    # 'django_twilio',
-    # 'rest_framework_docs',
+
 ]
 LOCAL_APPS = [
-    'bitnob_api.users.apps.UsersAppConfig',
-    'country',
-    'level',
-    'wallet',
-    'coin',
-    'orders',
+    'app_api.users.apps.UsersAppConfig',
 ]
 # https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
@@ -95,7 +88,7 @@ INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
 # ------------------------------------------------------------------------------
 # https://docs.djangoproject.com/en/dev/ref/settings/#migration-modules
 MIGRATION_MODULES = {
-    'sites': 'bitnob_api.contrib.sites.migrations'
+    'sites': 'app_api.contrib.sites.migrations'
 }
 
 # # AUTHENTICATION
@@ -146,7 +139,7 @@ MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
-    # 'oauth2_provider.middleware.OAuth2TokenMiddleware',
+    # 'oauth2_provider.middleware.OAuth2TokenMiddleware', use this if you are working with oauth
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -233,7 +226,7 @@ EMAIL_BACKEND = env('DJANGO_EMAIL_BACKEND', default='django.core.mail.backends.s
 ADMIN_URL = 'admin/'
 # https://docs.djangoproject.com/en/dev/ref/settings/#admins
 ADMINS = [
-    ("""Bernard""", 'barjebernard@gmail.com'),
+    ("""Admin """, 'admin@example.com'),
 ]
 # https://docs.djangoproject.com/en/dev/ref/settings/#managers
 MANAGERS = ADMINS
@@ -242,7 +235,7 @@ MANAGERS = ADMINS
 # AUTHENTICATION CONFIGURATION
 # ------------------------------------------------------------------------------
 AUTHENTICATION_BACKENDS = [
-    # 'oauth2_provider.backends.OAuth2Backend',
+    # 'oauth2_provider.backends.OAuth2Backend', # uncomment if using oauth for authentication
     'allauth.account.auth_backends.AuthenticationBackend',
     'django.contrib.auth.backends.ModelBackend',
 
@@ -251,14 +244,14 @@ AUTHENTICATION_BACKENDS = [
 ACCOUNT_AUTHENTICATION_METHOD = 'email'
 ACCOUNT_EMAIL_REQUIRED = True
 EMAIL_CONFIRMATION_SIGNUP = True
-ACCOUNT_EMAIL_VERIFICATION = 'mandatory|optional'
+ACCOUNT_EMAIL_VERIFICATION = 'mandatory'  # change this config to mandatory|optional if you want to make email confirmation optional
 ACCOUNT_ALLOW_REGISTRATION = True
-ACCOUNT_ADAPTER = 'bitnob_api.users.adapters.AccountAdapter'
+ACCOUNT_ADAPTER = 'app_api.users.adapters.AccountAdapter'
 LOGOUT_ON_PASSWORD_CHANGE = False
 AUTH_USER_MODEL = 'users.User'
 LOGIN_URL = 'account_login'
 AUTOSLUG_SLUGIFY_FUNCTION = 'slugify.slugify'
-ACCOUNT_EMAIL_SUBJECT_PREFIX = 'Bitnob'
+ACCOUNT_EMAIL_SUBJECT_PREFIX = 'app'
 
 
 REST_FRAMEWORK = {
@@ -266,7 +259,7 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.AllowAny',
     ),
     'DEFAULT_AUTHENTICATION_CLASSES': (
-        # 'oauth2_provider.contrib.rest_framework.OAuth2Authentication',
+        # 'oauth2_provider.contrib.rest_framework.OAuth2Authentication', # uncomment if using oauth for authentication
         'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
         'rest_framework.authentication.SessionAuthentication',
         'rest_framework.authentication.BasicAuthentication',
@@ -276,6 +269,7 @@ REST_FRAMEWORK = {
 
 }
 
+# uncomment if using oauth for authentication
 # OAUTH2_PROVIDER = {
 #     # this is the list of available scopes
 #     'SCOPES': {'read': 'Read scope',
@@ -297,45 +291,22 @@ JWT_AUTH = {
     'JWT_EXPIRATION_DELTA': datetime.timedelta(days=360),
     'JWT_ALLOW_REFRESH': True,
     'JWT_REFRESH_EXPIRATION_DELTA': datetime.timedelta(days=300),
-    'JWT_AUTH_HEADER_PREFIX': 'JWT',
+    'JWT_AUTH_HEADER_PREFIX': 'Bearer', # this is commo
 }
 
-# USER_DETAILS_SERIALIZER = 'bitnob_api.users.serializers.UserModelSerializer'
 
-# for use with the custom signup serializer
+# for use with the custom signup serializer, if you are collecting any extra fields other than
+# first name, last name and email during signup, it's better to use this so you can extend the
+# registration serializer, the default comes with phone number
 REST_AUTH_REGISTER_SERIALIZERS = {
-        'REGISTER_SERIALIZER': 'bitnob_api.users.register_serializer.CustomRegisterSerializer',
-        # 'LOGIN_SERIALIZER': 'bitnob_api.users.register_serializer.LoginSerializer'
+        'REGISTER_SERIALIZER': 'app_api.users.register_serializer.CustomRegisterSerializer',
+        # 'LOGIN_SERIALIZER': 'app_api.users.register_serializer.LoginSerializer'
 }
 
-# allow request from all urls for now..use white list later
-# CORS_ORIGIN_WHITELIST = (
-#     '*',
-# )
-#
-#
+# allow request from all these urls WARNING: DO NOT USE THE ASTERISK
 CORS_ORIGIN_WHITELIST = ('*')
 
 CORS_ORIGIN_ALLOW_ALL = True
 CORS_ALLOW_CREDENTIALS = True
 APPEND_SLASH = True
-ALLOWED_HOSTS = ['*', 'api.bitnob.com', 'ba52fd3b.ngrok.io', 'https://ba52fd3b.ngrok.io']
-
-BUY_ORDER_PREFIX = 'BNOB'
-SELL_ORDER_PREFIX = 'BNSL'
-
-TWILIO_ACCOUNT_SID = "AC5665b2503ae9794dcb956cf6839a9c6e"
-TWILIO_AUTH_TOKEN = "0d6902041eb1085270737b72eb7bf75c"
-TWILIO_DEFAULT_CALLERID = 'Bitnob'
-# VOUCHER_SERVER_URL = 'https://voucherapi.bitnob.com/api/v1/validator/validate_voucher/'
-RATES_API = 'https://bitpay.com/api/rates'
-QUICKSERVE = 'BTQS'
-
-cloudinary.config(
-  cloud_name="py",
-  api_key="974375294473519",
-  api_secret="J0qaRgA7qJK19uwBXu-G7asq1wM"
-)
-INCLUSIVE_FT_API = 'https://api.inclusiveft.com/v1/GH/search/'
-PAYSTACK_URL = 'https://api.paystack.co/'
-# ADMIN_URL = 'admin'
+ALLOWED_HOSTS = ['*']

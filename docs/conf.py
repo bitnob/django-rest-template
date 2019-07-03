@@ -1,4 +1,4 @@
-# bitnob-api documentation build configuration file, created by
+# app-api documentation build configuration file, created by
 # sphinx-quickstart.
 #
 # This file is execfile()d with the current directory set to its containing dir.
@@ -39,8 +39,8 @@ source_suffix = ".rst"
 master_doc = "index"
 
 # General information about the project.
-project = "bitnob-api"
-copyright = """2018, Bernard"""
+project = "app-api"
+copyright = """2018, Bernard Parah"""
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
@@ -163,7 +163,7 @@ html_static_path = ["_static"]
 # html_file_suffix = None
 
 # Output file base name for HTML help builder.
-htmlhelp_basename = "bitnob_apidoc"
+htmlhelp_basename = "app_apidoc"
 
 
 # -- Options for LaTeX output --------------------------------------------------
@@ -182,8 +182,8 @@ latex_elements = {
 latex_documents = [
     (
         "index",
-        "bitnob_api.tex",
-        "bitnob-api Documentation",
+        "app_api.tex",
+        "app-api Documentation",
         """Bernard""",
         "manual",
     )
@@ -217,8 +217,8 @@ latex_documents = [
 man_pages = [
     (
         "index",
-        "bitnob_api",
-        "bitnob-api Documentation",
+        "app_api",
+        "app-api Documentation",
         ["""Bernard"""],
         1,
     )
@@ -236,11 +236,11 @@ man_pages = [
 texinfo_documents = [
     (
         "index",
-        "bitnob_api",
-        "bitnob-api Documentation",
+        "app_api",
+        "app-api Documentation",
         """Bernard""",
-        "bitnob-api",
-        """Bitnob API""",
+        "app-api",
+        """app API""",
         "Miscellaneous",
     )
 ]

@@ -10,7 +10,7 @@ services:
     build:
       context: .
       dockerfile: ./compose/production/django/Dockerfile
-    image: bitnob_api_production_django
+    image: app_api_production_django
     depends_on:
       - postgres
       - redis
@@ -23,7 +23,7 @@ services:
     build:
       context: .
       dockerfile: ./compose/production/postgres/Dockerfile
-    image: bitnob_api_production_postgres
+    image: app_api_production_postgres
     volumes:
       - production_postgres_data:/var/lib/postgresql/data
       - production_postgres_data_backups:/backups
@@ -34,7 +34,7 @@ services:
     build:
       context: .
       dockerfile: ./compose/production/caddy/Dockerfile
-    image: bitnob_api_production_caddy
+    image: app_api_production_caddy
     depends_on:
       - django
     volumes:
@@ -48,10 +48,3 @@ services:
   redis:
     image: redis:3.2
 
-#  blockchain_wallet_service:
-#    build:
-#      context: .
-#      dockerfile: ./compose/production/blockchain/Dockerfile
-#    image: blockchain_wallet_service
-#    ports:
-#      - "3000:3000"

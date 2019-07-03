@@ -20,7 +20,7 @@ Add spread to price of BTC
 
 Oauth provider
 ^^^^^^^^^^^^^^^^^^^
-The aim of the oauth provider is to allow other sites to use the bitnob api for transactions.
+The aim of the oauth provider is to allow other sites to use the app api for transactions.
 Example is a wallet that will allows users to redeem gift cards right from within the app
 Requirements will be sending only their API key in the request
 
