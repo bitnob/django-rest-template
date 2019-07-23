@@ -2,7 +2,7 @@ version: 2
 jobs:
   build:
     machine: true
-    working_directory: ~/app_api
+    working_directory: ~/antcorp-api
     steps:
       - checkout
       - run:
@@ -13,16 +13,16 @@ jobs:
             docker-compose -f local.yml run django pytest
   deploy:
     machine: true
-    working_directory: ~/app_api
+    working_directory: ~/antcorp-api
     steps:
       - checkout
       - add_ssh_keys:
           fingerprints:
-            f1:40:<privatekey fingerprint>
+            2d:33:51:8a:e4:1b:2e:52:c1:d0:bd:10:6e:5b:d0:30
       - run:
           name: Deploy Master to Digital Ocean
           command: |
-            cp ./id_rsa_f140<privatekey fingerprint><private key fingerprint without columns>.pub ~/.ssh
+            cp ./id_rsa_2d33518ae41b2e52c1d0bd106e5bd030.pub ~/.ssh
             ls -al ~/.ssh
             base=https://github.com/docker/machine/releases/download/v0.14.0 &&
             curl -L $base/docker-machine-$(uname -s)-$(uname -m) >/tmp/docker-machine &&
@@ -50,9 +50,9 @@ jobs:
             echo SENTRY_DSN=$SENTRY_DSN >> .envs/.production/.django
             echo REDIS_URL=$REDIS_URL >> .envs/.production/.django
             echo DOMAIN_NAME=$DOMAIN_NAME >> .envs/.production/.caddy
-            docker-machine create --driver generic --generic-ip-address <server ip> --generic-ssh-key ~/.ssh/.id_rsa_f140<privatekey fingerprint><private key fingerprint without columns> app_api
+            docker-machine create --driver generic --generic-ip-address 165.227.127.212 --generic-ssh-key ~/.ssh/.id_rsa_2d33518ae41b2e52c1d0bd106e5bd030 antcorp-api
             export COMPOSE_TLS_VERSION=TLSv1_2
-            eval "$(docker-machine env app_api)"
+            eval "$(docker-machine env antcorp-api)"
             docker-compose -f production.yml build
             docker-compose -f production.yml up -d
 

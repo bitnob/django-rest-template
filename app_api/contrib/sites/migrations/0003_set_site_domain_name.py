@@ -14,8 +14,8 @@ def update_site_forward(apps, schema_editor):
     Site.objects.update_or_create(
         id=settings.SITE_ID,
         defaults={
-            "domain": "example.com",
-            "name": "Example",
+            "domain": "Antcorp.ng",
+            "name": "Antcorp",
         },
     )
 
@@ -23,7 +23,7 @@ def update_site_forward(apps, schema_editor):
         id=2,
         defaults={
             "domain": "localhost:8000",
-            "name": "Example",
+            "name": "Antcorp",
         },
     )
 
@@ -34,7 +34,7 @@ def update_site_backward(apps, schema_editor):
     """Revert site domain and name to default."""
     Site = apps.get_model("sites", "Site")
     Site.objects.update_or_create(
-        id=settings.SITE_ID, defaults={"domain": "exampl.ecom", "name": "Example"}
+        id=settings.SITE_ID, defaults={"domain": "exampl.ecom", "name": "Antcorp"}
     )
 
 
